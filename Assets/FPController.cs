@@ -9,6 +9,10 @@ public class FPController : MonoBehaviour
     public AudioSource[] footsteps;
     public AudioSource jump;
     public AudioSource land;
+    public AudioSource ammoPickup;
+    public AudioSource healthPickup;
+    public AudioSource shot;
+
     float speed = 0.1f;
     float Xsensitivity = 2;
     float Ysensitivity = 2;
@@ -136,10 +140,23 @@ public class FPController : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (IsGrounded())
+        if (col.gameObject.tag == "Ammo")
+        {
+            Debug.Log("Ammo");
+            Destroy(col.gameObject);
+            ammoPickup.Play();
+        }
+        else if (col.gameObject.tag == "MedKit")
+        {
+            Debug.Log("MedKit");
+            Destroy(col.gameObject);
+            healthPickup.Play();
+        }
+
+        else if (IsGrounded())
         {
             land.Play();
-            if(anim.GetBool("walking"))
+            if (anim.GetBool("walking"))
                 InvokeRepeating("PlayFootStepAudio", 0, 0.4f);
         }
     }
@@ -164,7 +181,7 @@ public class FPController : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape))
             cursorIsLocked = false;
-        else if ( Input.GetMouseButtonUp(0) )
+        else if (Input.GetMouseButtonUp(0))
             cursorIsLocked = true;
 
         if (cursorIsLocked)
@@ -177,6 +194,11 @@ public class FPController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+
+    public void Fire()
+    {
+        shot.Play();
     }
 
 }

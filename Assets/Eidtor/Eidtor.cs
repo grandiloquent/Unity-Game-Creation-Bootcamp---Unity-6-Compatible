@@ -18,10 +18,16 @@ public class EditorUtils : EditorWindow
     }
     private static void OnEnterPlayMode(PlayModeStateChange obj)
     {
-        if (obj == PlayModeStateChange.ExitingEditMode) {
+        if (obj == PlayModeStateChange.ExitingEditMode)
+        {
             Debug.Log("Exiting Edit Mode");
             AssetDatabase.Refresh(ImportAssetOptions.Default);
         }
+    }
+    [MenuItem("Tools/Refresh &r")]  // &s means Alt+S
+    private static void AssetDatabaseRefresh()
+    {
+        AssetDatabase.Refresh(ImportAssetOptions.Default);
     }
     private void OnGUI()
     {
@@ -61,7 +67,7 @@ public class EditorUtils : EditorWindow
             Debug.LogWarning("No GameObject selected.");
         }
     }
-    [MenuItem("Tools/Reset Rotation &r")]  // %g means Ctrl+G (Cmd+G on macOS)
+    [MenuItem("Tools/Reset Rotation")]  // %g means Ctrl+G (Cmd+G on macOS)
     private static void ResetRotation()
     {
         if (Selection.activeGameObject != null)
@@ -87,6 +93,25 @@ public class EditorUtils : EditorWindow
                     rb = go.AddComponent(typeof(Rigidbody)) as Rigidbody;
                 rb.isKinematic = true;
             }
+        }
+        else
+        {
+            Debug.LogWarning("No GameObject selected.");
+        }
+    }
+    [MenuItem("Tools/AudioSource")]  // &s means Alt+S
+    private static void AudioSource()
+    {
+        if (Selection.activeGameObject != null)
+        {
+            AudioSource audioSource = Selection.activeGameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            // audioSource.loop = true;
+            // audioSource.spatialBlend = 1.0f; // 3D sound
+            // audioSource.dopplerLevel = 0.0f; // No Doppler effect
+            // audioSource.minDistance = 1.0f; // Minimum distance for sound to be heard
+            // audioSource.maxDistance = 500.0f; // Maximum distance for sound to be heard
+
         }
         else
         {
